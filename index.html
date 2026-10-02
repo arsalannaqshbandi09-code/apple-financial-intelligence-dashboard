@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apple Financial Intelligence Dashboard</title>
+<style>
+:root{--bg:#070b14;--panel:#101827;--line:#25334b;--text:#f5f7fb;--muted:#94a0b5;--accent:#72a7ff;--green:#55d18b;--red:#ef7186;--r:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#14213b 0,#070b14 45%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial}
+.wrap{max-width:1500px;margin:auto;padding:26px}header{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:18px}
+.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+h1{font-size:clamp(30px,4vw,48px);line-height:1;margin:8px 0}.sub{color:var(--muted);max-width:800px;line-height:1.5;font-size:14px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}select,button{background:#152137;border:1px solid #2c3b57;color:#fff;border-radius:10px;padding:9px 12px;font-weight:700}button{cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px}.card{background:linear-gradient(180deg,#111a2a,#0c1421);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 14px 45px #0005}
+.kpi{padding:16px}.label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}.value{font-size:25px;font-weight:850;margin-top:6px}.delta{font-size:11px;margin-top:5px}.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.panel{padding:17px;min-height:400px}
+h2{font-size:15px;margin:0 0 4px}.take{font-size:12px;color:var(--muted);margin-bottom:10px}.chart{height:315px}svg{width:100%;height:100%;overflow:visible}
+.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-top:4px}.legend span{cursor:pointer}.dot{width:8px;height:8px;display:inline-block;border-radius:50%;margin-right:5px}
+.table-wrap{margin-top:12px;padding:17px;overflow:auto}table{border-collapse:collapse;width:100%;font-size:12px;min-width:720px}th,td{padding:10px 9px;border-bottom:1px solid #202c41;text-align:right}th:first-child,td:first-child{text-align:left}th{color:#aeb9ca;font-size:10px;text-transform:uppercase;letter-spacing:.08em}tbody tr:hover{background:#162237}
+.pill{padding:3px 7px;border-radius:999px;background:#17243a;color:#a8c7ff}.note{color:#7d899e;font-size:11px;line-height:1.55;margin:13px 2px}.source a{color:#8ebaff;text-decoration:none}
+.tip{position:fixed;opacity:0;pointer-events:none;background:#07101d;border:1px solid #344563;padding:8px 10px;border-radius:9px;font-size:11px;z-index:20;box-shadow:0 10px 30px #0008}
+@media(max-width:1050px){.kpis{grid-template-columns:repeat(3,1fr)}.grid,.grid2{grid-template-columns:1fr}}@media(max-width:600px){.wrap{padding:14px}header{display:block}.controls{margin-top:14px}.kpis{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="wrap">
+<header><div><div class="eyebrow">Source-backed financial analysis • Apple Inc.</div>
+<h1>Apple Financial Intelligence</h1>
+<div class="sub">FY2023–FY2025 dashboard covering growth, profitability, product mix and geography. Interact with charts, filters and the pivot-style detail table.</div></div>
+<div class="controls"><label>View year <select id="year"><option>2025</option><option>2024</option><option>2023</option></select></label><button id="reset">Reset</button></div></header>
+
+<div class="kpis" id="kpis"></div>
+<div class="grid">
+<section class="card panel"><h2>Revenue, profit and growth</h2><div class="take">Topline growth accelerated in FY2025; net income recovered after declining in FY2024.</div><div class="chart" id="profit"></div><div class="legend" id="profitLeg"></div></section>
+<section class="card panel"><h2>FY2025 revenue composition</h2><div class="take">Services passed $100B while iPhone remained the largest revenue category.</div><div class="chart" id="donut"></div><div class="legend" id="donutLeg"></div></section>
+</div>
+<div class="grid2">
+<section class="card panel"><h2>Product revenue trend</h2><div class="take">Hover a series for exact revenue; click a legend item to hide/show it.</div><div class="chart" id="product"></div><div class="legend" id="productLeg"></div></section>
+<section class="card panel"><h2>Geographic revenue trend</h2><div class="take">Europe and the Americas expanded across the period; Greater China moved lower.</div><div class="chart" id="geo"></div><div class="legend" id="geoLeg"></div></section>
+</div>
+<div class="grid2">
+<section class="card panel"><h2>Margin profile</h2><div class="take">Gross, operating and net margins are calculated from reported figures.</div><div class="chart" id="margin"></div><div class="legend" id="marginLeg"></div></section>
+<section class="card panel"><h2>Operating expense intensity</h2><div class="take">R&D and SG&A as a share of revenue.</div><div class="chart" id="opex"></div><div class="legend" id="opexLeg"></div></section>
+</div>
+
+<section class="card table-wrap"><h2>Pivot-style financial detail</h2><div class="take">Filter by dimension and year. Values are USD millions and are drawn from the same reviewed source data.</div>
+<div class="controls" style="margin:10px 0"><select id="dim"><option value="All">All dimensions</option><option value="P&L">P&L</option><option value="Product Revenue">Product Revenue</option><option value="Geography Revenue">Geography Revenue</option></select>
+<select id="yr"><option value="All">All years</option><option>2025</option><option>2024</option><option>2023</option></select></div>
+<table><thead><tr><th>Year</th><th>Dimension</th><th>Category</th><th>Value</th><th>Share / Margin</th><th>YoY</th></tr></thead><tbody id="tbody"></tbody></table></section>
+
+<div class="note"><b>Scope & methodology:</b> Apple fiscal years ended September 30, 2023; September 28, 2024; and September 27, 2025. Dollar figures are USD millions. No forecasts or market-price data are included. Margins are derived from reported revenue/profit figures. Product and geographic values are reported net sales.</div>
+<div class="card" style="margin-top:14px;padding:14px 17px;background:#0c1421">
+  <div style="font-size:10px;color:#72a7ff;font-weight:800;letter-spacing:.12em;text-transform:uppercase">Data provenance & references</div>
+  <div style="font-size:12px;color:#d7deea;margin-top:6px;line-height:1.55">
+    <b>Primary source:</b> Apple Inc., FY2025 Form 10-K filed with the U.S. Securities and Exchange Commission,
+    fiscal year ended September 27, 2025.
+    <a href="https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm" target="_blank" rel="noopener" style="color:#8ebaff">[SEC filing]</a>
+    <br>
+    <b>Issuer reference:</b>
+    <a href="https://investor.apple.com/investor-relations/sec-filings/default.aspx?language=en-US" target="_blank" rel="noopener" style="color:#8ebaff">Apple Investor Relations — SEC Filings</a>.
+    <br>
+    <span style="color:#94a0b5">All dashboard figures are in USD millions unless stated otherwise. Margins, shares and YoY changes are calculated from reported figures. No forecasts are included.</span>
+  </div>
+</div>
+</div><div class="tip" id="tip"></div>
+
+<script>
+const D={"pnl": {"2023": {"Revenue": 383285, "Gross Profit": 169148, "Operating Income": 114301, "Net Income": 96995, "R&D": 29915, "SG&A": 24932}, "2024": {"Revenue": 391035, "Gross Profit": 180683, "Operating Income": 123216, "Net Income": 93736, "R&D": 31370, "SG&A": 26097}, "2025": {"Revenue": 416161, "Gross Profit": 195201, "Operating Income": 133050, "Net Income": 112010, "R&D": 34550, "SG&A": 27601}}, "products": {"2023": {"iPhone": 200583, "Mac": 29357, "iPad": 28300, "Wearables, Home & Accessories": 39845, "Services": 85200}, "2024": {"iPhone": 201183, "Mac": 29984, "iPad": 26694, "Wearables, Home & Accessories": 37005, "Services": 96169}, "2025": {"iPhone": 209586, "Mac": 33708, "iPad": 28023, "Wearables, Home & Accessories": 35686, "Services": 109158}}, "regions": {"2023": {"Americas": 162560, "Europe": 94294, "Greater China": 72559, "Japan": 24257, "Rest of Asia Pacific": 29615}, "2024": {"Americas": 167045, "Europe": 101328, "Greater China": 66952, "Japan": 25052, "Rest of Asia Pacific": 30658}, "2025": {"Americas": 178353, "Europe": 111032, "Greater China": 64377, "Japan": 28703, "Rest of Asia Pacific": 33696}}};
+const C=["#72a7ff","#55d18b","#f0bd65","#c58cff","#ef7186","#55c7d9","#f58bc4"];
+let hidden=new Set(),tip=document.getElementById("tip");
+const money=v=>"$"+(v/1000).toFixed(1)+"B", pct=v=>(v*100).toFixed(1)+"%";
+function show(e,t){tip.innerHTML=t;tip.style.left=e.clientX+12+"px";tip.style.top=e.clientY+12+"px";tip.style.opacity=1}
+function hide(){tip.style.opacity=0}
+function svg(id){let el=document.getElementById(id);el.innerHTML="<svg></svg>";let s=el.firstChild,w=el.clientWidth,h=el.clientHeight,p={l:48,r:16,t:15,b:34};s.setAttribute("viewBox",`0 0 ${w} ${h}`);return{s,w,h,p,iw:w-p.l-p.r,ih:h-p.t-p.b}}
+function axes(g,max,fmt){for(let i=0;i<5;i++){let y=g.p.t+g.ih-i*g.ih/4,v=max*i/4;g.s.insertAdjacentHTML("beforeend",`<line x1="${g.p.l}" x2="${g.w-g.p.r}" y1="${y}" y2="${y}" stroke="#25334b"/><text x="${g.p.l-7}" y="${y+4}" text-anchor="end" font-size="9" fill="#78859a">${fmt(v)}</text>`)}}
+function leg(id,names){let e=document.getElementById(id);e.innerHTML="";names.forEach((n,i)=>{let x=document.createElement("span");x.innerHTML=`<i class="dot" style="background:${C[i%C.length]}"></i>${n}`;x.onclick=()=>{hidden.has(n)?hidden.delete(n):hidden.add(n);draw()};e.appendChild(x)})}
+function lines(id,series,max,fmt,legend){let g=svg(id);axes(g,max,fmt);let yrs=[2023,2024,2025];yrs.forEach((y,i)=>{let x=g.p.l+i*g.iw/2;g.s.insertAdjacentHTML("beforeend",`<text x="${x}" y="${g.h-7}" text-anchor="middle" font-size="9" fill="#78859a">${y}</text>`)});series.forEach((z,k)=>{if(hidden.has(z.n))return;let pts=z.v.map((v,i)=>[g.p.l+i*g.iw/2,g.p.t+g.ih-(v/max)*g.ih]);g.s.insertAdjacentHTML("beforeend",`<polyline points="${pts.map(p=>p.join(",")).join(" ")}" fill="none" stroke="${C[k%C.length]}" stroke-width="2.8" stroke-linecap="round"/>`);pts.forEach((p,i)=>{let c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("cx",p[0]);c.setAttribute("cy",p[1]);c.setAttribute("r",4.5);c.setAttribute("fill",C[k%C.length]);c.addEventListener("mousemove",e=>show(e,`<b>${z.n}</b><br>FY${yrs[i]}: ${money(z.v[i])}`));c.addEventListener("mouseleave",hide);g.s.appendChild(c)})});leg(legend,series.map(x=>x.n))}
+function donut(){let g=svg("donut"),s=g.s,cx=g.w/2,cy=g.h/2,r=Math.min(g.w,g.h)*.29,R=r*.58,a=0,vals=Object.entries(D.products["2025"]),tot=vals.reduce((q,x)=>q+x[1],0);vals.forEach(([n,v],i)=>{let b=a+v/tot*Math.PI*2,large=b-a>Math.PI?1:0,path=`M ${cx+r*Math.cos(a)} ${cy+r*Math.sin(a)} A ${r} ${r} 0 ${large} 1 ${cx+r*Math.cos(b)} ${cy+r*Math.sin(b)} L ${cx+R*Math.cos(b)} ${cy+R*Math.sin(b)} A ${R} ${R} 0 ${large} 0 ${cx+R*Math.cos(a)} ${cy+R*Math.sin(a)} Z`,p=document.createElementNS("http://www.w3.org/2000/svg","path");p.setAttribute("d",path);p.setAttribute("fill",C[i]);p.addEventListener("mousemove",e=>show(e,`<b>${n}</b><br>${money(v)} • ${(v/tot*100).toFixed(1)}%`));p.addEventListener("mouseleave",hide);s.appendChild(p);a=b});s.insertAdjacentHTML("beforeend",`<text x="${cx}" y="${cy-3}" text-anchor="middle" font-size="19" font-weight="800" fill="#fff">$416.2B</text><text x="${cx}" y="${cy+15}" text-anchor="middle" font-size="9" fill="#8e9ab0">FY2025 revenue</text>`);leg("donutLeg",vals.map(x=>x[0]))}
+function rowsFor(dim,yr){let rows=[];for(let y of [2023,2024,2025]){if(yr!="All"&&+yr!==y)continue;for(let [c,v] of Object.entries(D.products[y]))rows.push([y,"Product Revenue",c,v]);for(let [c,v] of Object.entries(D.regions[y]))rows.push([y,"Geography Revenue",c,v]);for(let [c,v] of Object.entries(D.pnl[y]))rows.push([y,"P&L",c,v])}return dim=="All"?rows:rows.filter(r=>r[1]==dim)}
+function table(){let rows=rowsFor(document.getElementById("dim").value,document.getElementById("yr").value);document.getElementById("tbody").innerHTML=rows.map(r=>{let rev=D.pnl[r[0]].Revenue,share=r[3]/rev,prior=D.products[r[0]-1]||D.regions[r[0]-1]||D.pnl[r[0]-1],pv=prior&&prior[r[2]],yoy=pv?((r[3]/pv)-1):null;return `<tr><td>${r[0]}</td><td><span class="pill">${r[1]}</span></td><td>${r[2]}</td><td>${r[3].toLocaleString()}</td><td>${pct(share)}</td><td class="${yoy==null?'neutral':yoy>=0?'up':'down'}">${yoy==null?'—':(yoy>=0?'▲ ':'▼ ')+(Math.abs(yoy)*100).toFixed(1)+'%'}</td></tr>`}).join("")}
+function draw(){let p=D.pnl,y=document.getElementById("year").value,cur=p[y],prev=p[+y-1];let cards=[["Revenue",cur.Revenue,prev?(cur.Revenue/prev.Revenue-1):0],["Gross profit",cur["Gross Profit"],cur["Gross Profit"]/cur.Revenue],["Operating income",cur["Operating Income"],prev?(cur["Operating Income"]/prev["Operating Income"]-1):0],["Net income",cur["Net Income"],prev?(cur["Net Income"]/prev["Net Income"]-1):0],["Gross margin",cur["Gross Profit"]/cur.Revenue,null],["Net margin",cur["Net Income"]/cur.Revenue,null]];document.getElementById("kpis").innerHTML=cards.map((x,i)=>`<div class="card kpi"><div class="label">${x[0]}</div><div class="value">${i>=4?pct(x[1]):money(x[1])}</div><div class="delta ${i>=4?'neutral':x[2]>=0?'up':'down'}">${i>=4?'FY'+y+' margin':(prev?(x[2]>=0?'▲ ':'▼ ')+(Math.abs(x[2])*100).toFixed(1)+'% YoY':'No prior year')}</div></div>`).join("");
+lines("profit",["Revenue","Operating Income","Net Income"].map(n=>({n,v:[2023,2024,2025].map(z=>p[z][n])})),450000,money,"profitLeg");donut();
+lines(Object.keys(D.products["2025"])[0]?"product":"product",Object.keys(D.products["2025"]).map(n=>({n,v:[2023,2024,2025].map(z=>D.products[z][n])})),220000,money,"productLeg");
+lines("geo",Object.keys(D.regions["2025"]).map(n=>({n,v:[2023,2024,2025].map(z=>D.regions[z][n])})),190000,money,"geoLeg");
+lines("margin",["Gross Profit","Operating Income","Net Income"].map(n=>({n:n==="Gross Profit"?"Gross margin":n==="Operating Income"?"Operating margin":"Net margin",v:[2023,2024,2025].map(z=>p[z][n]/p[z].Revenue)})),.55,pct,"marginLeg");
+lines("opex",["R&D","SG&A"].map(n=>({n:n+" / Revenue",v:[2023,2024,2025].map(z=>p[z][n]/p[z].Revenue)})),.10,pct,"opexLeg");table()}
+document.getElementById("year").onchange=draw;document.getElementById("dim").onchange=table;document.getElementById("yr").onchange=table;document.getElementById("reset").onclick=()=>{hidden.clear();document.getElementById("year").value="2025";document.getElementById("dim").value="All";document.getElementById("yr").value="All";draw()};window.onresize=draw;draw();
+</script></body></html>

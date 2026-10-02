@@ -1,0 +1,55 @@
+Year,Dimension,Category,Value_USD_m
+2023,P&L,Products,298085
+2023,P&L,Services,85200
+2023,P&L,Total Revenue,383285
+2023,P&L,Gross Margin,169148
+2023,P&L,Operating Income,114301
+2023,P&L,Net Income,96995
+2023,P&L,R&D,29915
+2023,P&L,SG&A,24932
+2024,P&L,Products,294866
+2024,P&L,Services,96169
+2024,P&L,Total Revenue,391035
+2024,P&L,Gross Margin,180683
+2024,P&L,Operating Income,123216
+2024,P&L,Net Income,93736
+2024,P&L,R&D,31370
+2024,P&L,SG&A,26097
+2025,P&L,Products,307003
+2025,P&L,Services,109158
+2025,P&L,Total Revenue,416161
+2025,P&L,Gross Margin,195201
+2025,P&L,Operating Income,133050
+2025,P&L,Net Income,112010
+2025,P&L,R&D,34550
+2025,P&L,SG&A,27601
+2023,Product Revenue,iPhone,200583
+2023,Product Revenue,Mac,29357
+2023,Product Revenue,iPad,28300
+2023,Product Revenue,"Wearables, Home & Accessories",39845
+2023,Product Revenue,Services,85200
+2024,Product Revenue,iPhone,201183
+2024,Product Revenue,Mac,29984
+2024,Product Revenue,iPad,26694
+2024,Product Revenue,"Wearables, Home & Accessories",37005
+2024,Product Revenue,Services,96169
+2025,Product Revenue,iPhone,209586
+2025,Product Revenue,Mac,33708
+2025,Product Revenue,iPad,28023
+2025,Product Revenue,"Wearables, Home & Accessories",35686
+2025,Product Revenue,Services,109158
+2023,Geography Revenue,Americas,162560
+2023,Geography Revenue,Europe,94294
+2023,Geography Revenue,Greater China,72559
+2023,Geography Revenue,Japan,24257
+2023,Geography Revenue,Rest of Asia Pacific,29615
+2024,Geography Revenue,Americas,167045
+2024,Geography Revenue,Europe,101328
+2024,Geography Revenue,Greater China,66952
+2024,Geography Revenue,Japan,25052
+2024,Geography Revenue,Rest of Asia Pacific,30658
+2025,Geography Revenue,Americas,178353
+2025,Geography Revenue,Europe,111032
+2025,Geography Revenue,Greater China,64377
+2025,Geography Revenue,Japan,28703
+2025,Geography Revenue,Rest of Asia Pacific,33696
